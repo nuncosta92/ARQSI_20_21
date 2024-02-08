@@ -1,0 +1,1575 @@
+{
+	"info": {
+		"_postman_id": "1adbac92-abb8-4b68-9f62-51bb22d54d2b",
+		"name": "Tests (Integration)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tag",
+			"item": [
+				{
+					"name": "Delete all before all",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Tags",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"There are no tags\", function () {\r",
+									"    pm.response.to.have.body(\"[]\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/tag",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"tag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create Tag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"tagId\", responseJson.tagId); // save the tag's id for further tests\r",
+									"console.log(pm.environment.get(\"tagId\"));\r",
+									"\r",
+									"pm.environment.set(\"tag\", responseJson.tag); // save the tag's id for further tests\r",
+									"console.log(pm.environment.get(\"tag\"));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"playerId\": 1,\r\n  \"tag\": \"Teste\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/tag",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"tag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Tag just created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"tagId\"));\r",
+									"\r",
+									"pm.test(\"Tag creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Tag has correct tagId\", function () {\r",
+									"    pm.expect(responseJson.tagId).to.eql(pm.environment.get(\"tagId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Tag has correct tag\", function () {\r",
+									"    pm.expect(responseJson.tag).to.eql(pm.environment.get(\"tag\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/tag/{{tagId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"tag",
+								"{{tagId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateTag",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"tag\", responseJson.tag); // save the tag's id for further tests\r",
+									"console.log(pm.environment.get(\"tag\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"tagId\": {{tagId}},\r\n    \"tag\": \"UpdatedTag\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/tag/updatetag",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"tag",
+								"updatetag"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Tag just updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"tagId\"));\r",
+									"\r",
+									"pm.test(\"Tag creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Tag has correct tagId\", function () {\r",
+									"    pm.expect(responseJson.tagId).to.eql(pm.environment.get(\"tagId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Tag has correct tag\", function () {\r",
+									"    pm.expect(responseJson.tag).to.eql(pm.environment.get(\"tag\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/tag/{{tagId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"tag",
+								"{{tagId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tear down",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Player",
+			"item": [
+				{
+					"name": "Delete all before all",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Players",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"There are no tags\", function () {\r",
+									"    pm.response.to.have.body(\"[]\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/player",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create Player",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"playerId\", responseJson.playerId); \r",
+									"console.log(pm.environment.get(\"playerId\"));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"nome\", responseJson.nome); \r",
+									"console.log(pm.environment.get(\"nome\"));\r",
+									"\r",
+									"pm.environment.set(\"country\", responseJson.country);\r",
+									"console.log(pm.environment.get(\"country\"));\r",
+									"\r",
+									"pm.environment.set(\"city\", responseJson.city);\r",
+									"console.log(pm.environment.get(\"city\"));\r",
+									"\r",
+									"pm.environment.set(\"password\", responseJson.password);\r",
+									"console.log(pm.environment.get(\"password\"));\r",
+									"\r",
+									"pm.environment.set(\"email\", responseJson.email);\r",
+									"console.log(pm.environment.get(\"email\"));\r",
+									"\r",
+									"pm.environment.set(\"phone\", responseJson.phone);\r",
+									"console.log(pm.environment.get(\"phone\"));\r",
+									"\r",
+									"pm.environment.set(\"birthdate\", responseJson.birthdate);\r",
+									"console.log(pm.environment.get(\"birthdate\"));\r",
+									"\r",
+									"pm.environment.set(\"avatar\", responseJson.avatar);\r",
+									"console.log(pm.environment.get(\"avatar\"));\r",
+									"\r",
+									"pm.environment.set(\"linkedIn\", responseJson.linkedIn);\r",
+									"console.log(pm.environment.get(\"linkedIn\"));\r",
+									"\r",
+									"pm.environment.set(\"facebook\", responseJson.facebook);\r",
+									"console.log(pm.environment.get(\"facebook\"));\r",
+									"\r",
+									"pm.environment.set(\"description\", responseJson.description);\r",
+									"console.log(pm.environment.get(\"description\"));\r",
+									"\r",
+									"pm.environment.set(\"emotionalState\", responseJson.emotionalState);\r",
+									"console.log(pm.environment.get(\"emotionalState\"));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nome\": \"Antonio Santos\",\r\n  \"country\": \"Portugal\",\r\n  \"city\": \"Porto\",\r\n  \"password\": \"Password321\",\r\n  \"email\": \"ola@alo.com\",\r\n  \"phone\": \"919913211\",\r\n  \"birthdate\": \"21-05-1990\",\r\n  \"avatar\": \"someAvatar\",\r\n  \"linkedIn\": \"linkedinAntonioSantos\",\r\n  \"facebook\": \"facebookAntonioSantos\",\r\n  \"description\": \"esta e a discricao\",\r\n  \"emotionalState\": \"joy\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/player",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"player"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Player just created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"tagId\"));\r",
+									"\r",
+									"pm.test(\"Tag creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct nome\", function () {\r",
+									"    pm.expect(responseJson.nome).to.eql(pm.environment.get(\"nome\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct country\", function () {\r",
+									"    pm.expect(responseJson.country).to.eql(pm.environment.get(\"country\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct city\", function () {\r",
+									"    pm.expect(responseJson.city).to.eql(pm.environment.get(\"city\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct password\", function () {\r",
+									"    pm.expect(responseJson.password).to.eql(pm.environment.get(\"password\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct email\", function () {\r",
+									"    pm.expect(responseJson.email).to.eql(pm.environment.get(\"email\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct phone\", function () {\r",
+									"    pm.expect(responseJson.phone).to.eql(pm.environment.get(\"phone\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct birthdate\", function () {\r",
+									"    pm.expect(responseJson.birthdate).to.eql(pm.environment.get(\"birthdate\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct avatar\", function () {\r",
+									"    pm.expect(responseJson.avatar).to.eql(pm.environment.get(\"avatar\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct linkedIn\", function () {\r",
+									"    pm.expect(responseJson.linkedIn).to.eql(pm.environment.get(\"linkedIn\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct facebook\", function () {\r",
+									"    pm.expect(responseJson.facebook).to.eql(pm.environment.get(\"facebook\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct description\", function () {\r",
+									"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"description\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct emotionalState\", function () {\r",
+									"    pm.expect(responseJson.emotionalState).to.eql(pm.environment.get(\"emotionalState\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/player/{{playerId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"player",
+								"{{playerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePlayerHumor",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"emotionalState\", responseJson.emotionalState);\r",
+									"console.log(pm.environment.get(\"emotionalState\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"playerId\": {{playerId}},\r\n    \"emotionalState\": \"PROUD\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/player/updatehumor",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"player",
+								"updatehumor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Player just updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"tagId\"));\r",
+									"\r",
+									"pm.test(\"Tag creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct emotionalState\", function () {\r",
+									"    pm.expect(responseJson.emotionalState).to.eql(pm.environment.get(\"emotionalState\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/player/{{playerId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"player",
+								"{{playerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdatePlayer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"nome\", responseJson.nome); \r",
+									"console.log(pm.environment.get(\"nome\"));\r",
+									"\r",
+									"pm.environment.set(\"country\", responseJson.country);\r",
+									"console.log(pm.environment.get(\"country\"));\r",
+									"\r",
+									"pm.environment.set(\"city\", responseJson.city);\r",
+									"console.log(pm.environment.get(\"city\"));\r",
+									"\r",
+									"pm.environment.set(\"password\", responseJson.password);\r",
+									"console.log(pm.environment.get(\"password\"));\r",
+									"\r",
+									"pm.environment.set(\"email\", responseJson.email);\r",
+									"console.log(pm.environment.get(\"email\"));\r",
+									"\r",
+									"pm.environment.set(\"phone\", responseJson.phone);\r",
+									"console.log(pm.environment.get(\"phone\"));\r",
+									"\r",
+									"pm.environment.set(\"birthdate\", responseJson.birthdate);\r",
+									"console.log(pm.environment.get(\"birthdate\"));\r",
+									"\r",
+									"pm.environment.set(\"avatar\", responseJson.avatar);\r",
+									"console.log(pm.environment.get(\"avatar\"));\r",
+									"\r",
+									"pm.environment.set(\"linkedIn\", responseJson.linkedIn);\r",
+									"console.log(pm.environment.get(\"linkedIn\"));\r",
+									"\r",
+									"pm.environment.set(\"facebook\", responseJson.facebook);\r",
+									"console.log(pm.environment.get(\"facebook\"));\r",
+									"\r",
+									"pm.environment.set(\"description\", responseJson.description);\r",
+									"console.log(pm.environment.get(\"description\"));\r",
+									"\r",
+									"pm.environment.set(\"emotionalState\", responseJson.emotionalState);\r",
+									"console.log(pm.environment.get(\"emotionalState\"));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"playerId\": {{playerId}},\r\n    \"nome\": \"Alex12312\",\r\n    \"country\": \"Alex\",\r\n    \"city\": \"Alex\",\r\n    \"password\": \"Alex\",\r\n    \"email\": \"xela.123@asdsd.com\",\r\n    \"phone\": \"Alex\",\r\n    \"birthdate\": \"Alex\",\r\n    \"avatar\": \"Alex\",\r\n    \"linkedIn\": \"Alex\",\r\n    \"facebook\": \"Alex\",\r\n    \"description\": \"Alex\",\r\n    \"emotionalState\": \"RAGE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/player/updateplayer",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"player",
+								"updateplayer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Player - humor updated",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"tagId\"));\r",
+									"\r",
+									"pm.test(\"Tag creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct nome\", function () {\r",
+									"    pm.expect(responseJson.nome).to.eql(pm.environment.get(\"nome\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct country\", function () {\r",
+									"    pm.expect(responseJson.country).to.eql(pm.environment.get(\"country\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct city\", function () {\r",
+									"    pm.expect(responseJson.city).to.eql(pm.environment.get(\"city\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct password\", function () {\r",
+									"    pm.expect(responseJson.password).to.eql(pm.environment.get(\"password\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct email\", function () {\r",
+									"    pm.expect(responseJson.email).to.eql(pm.environment.get(\"email\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct phone\", function () {\r",
+									"    pm.expect(responseJson.phone).to.eql(pm.environment.get(\"phone\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct birthdate\", function () {\r",
+									"    pm.expect(responseJson.birthdate).to.eql(pm.environment.get(\"birthdate\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct avatar\", function () {\r",
+									"    pm.expect(responseJson.avatar).to.eql(pm.environment.get(\"avatar\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct linkedIn\", function () {\r",
+									"    pm.expect(responseJson.linkedIn).to.eql(pm.environment.get(\"linkedIn\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct facebook\", function () {\r",
+									"    pm.expect(responseJson.facebook).to.eql(pm.environment.get(\"facebook\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct description\", function () {\r",
+									"    pm.expect(responseJson.description).to.eql(pm.environment.get(\"description\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Player has correct emotionalState\", function () {\r",
+									"    pm.expect(responseJson.emotionalState).to.eql(pm.environment.get(\"emotionalState\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/player/{{playerId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"player",
+								"{{playerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tear down",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Introduction",
+			"item": [
+				{
+					"name": "Delete all before all",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllIntroductions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"There are no introductions\", function () {\r",
+									"    pm.response.to.have.body(\"[]\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/introduction",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"introduction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NewIntroduction",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"introductionId\", responseJson.introductionId); \r",
+									"console.log(pm.environment.get(\"introductionId\"));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"playerId\", responseJson.playerId); \r",
+									"console.log(pm.environment.get(\"playerId\"));\r",
+									"\r",
+									"pm.environment.set(\"itermediatePlayerId\", responseJson.itermediatePlayerId);\r",
+									"console.log(pm.environment.get(\"itermediatePlayerId\"));\r",
+									"\r",
+									"pm.environment.set(\"targetPlayerId\", responseJson.targetPlayerId);\r",
+									"console.log(pm.environment.get(\"targetPlayerId\"));\r",
+									"\r",
+									"pm.environment.set(\"message\", responseJson.message);\r",
+									"console.log(pm.environment.get(\"message\"));\r",
+									"\r",
+									"pm.environment.set(\"status\", responseJson.status);\r",
+									"console.log(pm.environment.get(\"status\"));\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"playerId\": 1,\r\n  \"itermediatePlayerId\": 10,\r\n  \"targetPlayerId\": 5,\r\n  \"message\": \"null\",\r\n  \"status\": \"Requested\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/introduction",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"introduction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetIntroductionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"introductionId\"));\r",
+									"\r",
+									"pm.test(\"Tag creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct playerId\", function () {\r",
+									"    pm.expect(responseJson.playerId).to.eql(pm.environment.get(\"playerId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct itermediatePlayerId\", function () {\r",
+									"    pm.expect(responseJson.itermediatePlayerId).to.eql(pm.environment.get(\"itermediatePlayerId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct targetPlayerId\", function () {\r",
+									"    pm.expect(responseJson.targetPlayerId).to.eql(pm.environment.get(\"targetPlayerId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct message\", function () {\r",
+									"    pm.expect(responseJson.message).to.eql(pm.environment.get(\"message\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct status\", function () {\r",
+									"    pm.expect(responseJson.status).to.eql(pm.environment.get(\"status\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/introduction/{{introductionId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"introduction",
+								"{{introductionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"connectionId\"));\r",
+									"\r",
+									"pm.test(\"Introduction update returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"status\", \"APPROVED\"); \r",
+									"console.log(pm.environment.get(\"status\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/introduction/accept?playerId={{playerId}}&itermediatePlayerId={{itermediatePlayerId}}&targetPlayerId={{targetPlayerId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"introduction",
+								"accept"
+							],
+							"query": [
+								{
+									"key": "playerId",
+									"value": "{{playerId}}"
+								},
+								{
+									"key": "itermediatePlayerId",
+									"value": "{{itermediatePlayerId}}"
+								},
+								{
+									"key": "targetPlayerId",
+									"value": "{{targetPlayerId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetIntroductionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"introductionId\"));\r",
+									"\r",
+									"pm.test(\"Tag creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct playerId\", function () {\r",
+									"    pm.expect(responseJson.playerId).to.eql(pm.environment.get(\"playerId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct itermediatePlayerId\", function () {\r",
+									"    pm.expect(responseJson.itermediatePlayerId).to.eql(pm.environment.get(\"itermediatePlayerId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct targetPlayerId\", function () {\r",
+									"    pm.expect(responseJson.targetPlayerId).to.eql(pm.environment.get(\"targetPlayerId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct message\", function () {\r",
+									"    pm.expect(responseJson.message).to.eql(pm.environment.get(\"message\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Introduction has correct status\", function () {\r",
+									"    pm.expect(responseJson.status).to.eql(pm.environment.get(\"status\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/introduction/{{introductionId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"introduction",
+								"{{introductionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tear down",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Connection",
+			"item": [
+				{
+					"name": "Delete all before all",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllConnections",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"There are no connections\", function () {\r",
+									"    pm.response.to.have.body(\"[]\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/connection",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"connection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "NewConnection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"connectionId\", responseJson.connectionId); \r",
+									"console.log(pm.environment.get(\"connectionId\"));\r",
+									"\r",
+									"\r",
+									"pm.environment.set(\"strength\", responseJson.strength); \r",
+									"console.log(pm.environment.get(\"strength\"));\r",
+									"\r",
+									"pm.environment.set(\"userA\", responseJson.userA);\r",
+									"console.log(pm.environment.get(\"userA\"));\r",
+									"\r",
+									"pm.environment.set(\"userB\", responseJson.userB);\r",
+									"console.log(pm.environment.get(\"userB\"));\r",
+									"\r",
+									"pm.environment.set(\"status\", responseJson.status);\r",
+									"console.log(pm.environment.get(\"status\"));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"strength\": \"0\",\r\n  \"userA\": \"2\",\r\n  \"userB\": \"3\",\r\n  \"status\": \"REQUESTED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/connection",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"connection"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetConnectionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"connectionId\"));\r",
+									"\r",
+									"pm.test(\"Connection creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct strength\", function () {\r",
+									"    pm.expect(responseJson.strength).to.eql(pm.environment.get(\"strength\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct userA\", function () {\r",
+									"    pm.expect(responseJson.userA).to.eql(pm.environment.get(\"userA\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct userB\", function () {\r",
+									"    pm.expect(responseJson.userB).to.eql(pm.environment.get(\"userB\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct status\", function () {\r",
+									"    pm.expect(responseJson.status).to.eql(pm.environment.get(\"status\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/connection/{{connectionId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"connection",
+								"{{connectionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accept/Reject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"connectionId\"));\r",
+									"\r",
+									"pm.test(\"Connection update returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"status\", responseJson.status); \r",
+									"console.log(pm.environment.get(\"status\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"strength\": {{strength}},\r\n  \"userA\": {{userA}},\r\n  \"userB\": {{userB}},\r\n  \"status\": \"APPROVED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/connection/action",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"connection",
+								"action"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetConnectionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"connectionId\"));\r",
+									"\r",
+									"pm.test(\"Connection creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct strength\", function () {\r",
+									"    pm.expect(responseJson.strength).to.eql(pm.environment.get(\"strength\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct userA\", function () {\r",
+									"    pm.expect(responseJson.userA).to.eql(pm.environment.get(\"userA\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct userB\", function () {\r",
+									"    pm.expect(responseJson.userB).to.eql(pm.environment.get(\"userB\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct status\", function () {\r",
+									"    pm.expect(responseJson.status).to.eql(pm.environment.get(\"status\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/connection/{{connectionId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"connection",
+								"{{connectionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PutConnectionStrenght",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"connectionId\"));\r",
+									"\r",
+									"pm.test(\"Connection creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.environment.set(\"strength\", responseJson.strength); \r",
+									"console.log(pm.environment.get(\"strength\"));\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/Connection/{{connectionId}}/updateStrength?strength=5",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"Connection",
+								"{{connectionId}}",
+								"updateStrength"
+							],
+							"query": [
+								{
+									"key": "strength",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetConnectionById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"console.log(pm.environment.get(\"connectionId\"));\r",
+									"\r",
+									"pm.test(\"Connection creation returns status 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct strength\", function () {\r",
+									"    pm.expect(responseJson.strength).to.eql(pm.environment.get(\"strength\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct userA\", function () {\r",
+									"    pm.expect(responseJson.userA).to.eql(pm.environment.get(\"userA\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct userB\", function () {\r",
+									"    pm.expect(responseJson.userB).to.eql(pm.environment.get(\"userB\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returned Connection has correct status\", function () {\r",
+									"    pm.expect(responseJson.status).to.eql(pm.environment.get(\"status\"));\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/connection/{{connectionId}}",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"connection",
+								"{{connectionId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Tear down",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://arqsip1.azurewebsites.net/api/test",
+							"protocol": "https",
+							"host": [
+								"arqsip1",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"api",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,20 @@
+diff a/package.json b/package.json	(rejected hunks)
+@@ -5,13 +5,17 @@
+   "main": "index.js",
+   "dependencies": {
+     "@hapi/joi": "^15.0.3",
++    "@types/mongoose": "^5.7.37",
++    "@types/uuidv4": "^5.0.0",
+     "cors": "^2.8.5",
+     "dotenv": "^8.2.0",
+     "express": "^4.17.1",
+     "joi": "^17.3.0",
+     "mongoose": "^5.10.11",
+     "test": "^0.6.0",
+-    "ts-serializer": "^2.2.6"
++    "ts-serializer": "^2.2.6",
++    "typedi": "^0.8.0",
++    "uuidv4": "^6.2.5"
+   },
+   "devDependencies": {
+     "@typescript-eslint/eslint-plugin": "^4.6.0",
